@@ -36,20 +36,20 @@
   "keywords": [
     "ember-addon"
   ],
+  "ember-addon": {
+    "before": [
+      "ember-cli-htmlbars"
+    ],
+    "configPath": "tests/dummy/config"
+  },
   "dependencies": {
+    "broccoli-concat": "0.0.13",
     "broccoli-filter": "^0.1.14",
     "broccoli-funnel": "^0.2.3",
     "broccoli-merge-trees": "^0.2.1",
     "css-selector-parser": "^1.0.4",
     "ember-cli-babel": "^5.0.0",
+    "ember-cli-version-checker": "^1.0.2",
     "postcss": "^4.1.11"
-  },
-  "ember-addon": {
-    "main": "index.js",
-    "before": [
-      "ember-cli-postcss",
-      "ember-cli-htmlbars"
-    ],
-    "configPath": "tests/dummy/config"
   }
 }

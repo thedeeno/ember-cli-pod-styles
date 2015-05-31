@@ -1,5 +1,24 @@
 # Ember-cli-component-sass-marker
 
+```
+// original
+<ul class='foo'>
+</ul>
+
+// template: filesystem pragma injection step
+<!-- @component: my-component-name -->
+<ul class='foo'>
+</ul>
+
+// htmlbars: ast tranform plugin
+1) find the first comment: <!-- @component: my-component-name -->
+2) extract the component name from comment: my-component-name
+3) delete the comment
+4) to use the component name to walk the nodes and namespace the styles
+<ul class='my-component-name__foo'>
+</ul>
+```
+
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
