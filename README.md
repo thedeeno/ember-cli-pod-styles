@@ -1,44 +1,74 @@
-# Ember-cli-component-sass-marker
+# ember-cli-pod-styles
+
+This ember addon makes it easy to write component-namespaced css.
+
+It will automatically namespace each component's style.css and
+concatenate the results into `app.css`.
+
+At runtime, when ember inserts elements into the DOM this addon will add
+`style-scope` marker classes to ensure the proper specificity for the
+namespaced styles. 
+
+This addon requires `postcss`
+
+Input:
+```
+// my-component/template.hbs
+<div class='foo'>
+</div>
+
+// my-component/style.css
+:host { background: blue; }
+.foo { color: red; }
+```
+
+Runtime output:
 
 ```
-// original
-<ul class='foo'>
-</ul>
+<my-component>
+  <div class='foo style-scope my-component'>
+  </div>
+</my-component>
 
-// template: filesystem pragma injection step
-<!-- @component: my-component-name -->
-<ul class='foo'>
-</ul>
-
-// htmlbars: ast tranform plugin
-1) find the first comment: <!-- @component: my-component-name -->
-2) extract the component name from comment: my-component-name
-3) delete the comment
-4) to use the component name to walk the nodes and namespace the styles
-<ul class='my-component-name__foo'>
-</ul>
+my-component { background: blue; }
+.foo.my-component { color: red; }
 ```
-
-This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
-* `git clone` this repository
-* `npm install`
-* `bower install`
+```
+npm install ember-cli-pod-styles
+```
 
-## Running
+## Usage
 
-* `ember server`
-* Visit your app at http://localhost:4200.
+Add at least one postcss plugin to `podStyleOptions`:
 
-## Running Tests
+```
+// ember-cli-build.js
+var app = new EmberApp(defaults, {
+  podStyleOptions: {
+    plugins: [
+      require('postcss-nested'),
+      // additional postcss plugins here
+    ]
+  }
+});
+```
 
-* `ember test`
-* `ember test --server`
+In your component's pod directory add a style.css file with styles you
+want automatically namespaced:
 
-## Building
+```
+// app/components/foo-bar/style.css
+:host {}             // => foo-bar
+.baz {}              // => .baz.foo-bar
+.baz:nth-child(1) {} // => .baz.foo-bar:nth-child(1)
+```
 
-* `ember build`
+Make sure to change the `tagName` for your component:
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+export default Ember.Component.extend({
+  tagName: 'foo-bar'
+});
+
